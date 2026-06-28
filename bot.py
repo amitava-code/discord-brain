@@ -7,14 +7,27 @@ import discord
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.agents import create_agent
 from langchain.messages import HumanMessage
+from langchain.tools import tool
+from tavily import TavilyClient
 
 intents = discord.Intents.default()
 intents.message_content = True
 
 client = discord.Client(intents=intents)
 
+tavily_client = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
+
+@tool
+def surfInterNet(query:str):
+    """USe this tool to surf internet and get latest information"""
+
+    result = tavily_client.search(query=query)
+
+    return str(result)
+
+
 model = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
-agent = create_agent(model=model, tools=[])
+agent = create_agent(model=model, tools=[surfInterNet])
 
 
 @client.event
@@ -24,7 +37,7 @@ async def on_message(message):
     
     content = message.content
 
-    response = agent.invoke({"messages":[HumanMessage(content)]})
+    response = await agent.ainvoke({"messages":[HumanMessage(content)]})
 
     agent_message = response["messages"][-1].content
 
