@@ -52,7 +52,14 @@ async def on_message(message):
         agent_message = "API limit reached, Try again later"
 
 
-    await message.channel.send(agent_message)
+    def split_message(text, limit=2000):
+
+        return [text[i:i+limit] for i in range(0, len(text), limit)]
+
+
+    for chunk in split_message(agent_message):
+        await message.channel.send(chunk)
+
 
 
 
