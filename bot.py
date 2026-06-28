@@ -42,11 +42,20 @@ async def on_message(message):
     
     content = message.content
 
-    response = await agent.ainvoke({"messages":[HumanMessage(content)]})
+    try:
+        response = await agent.ainvoke({"messages":[HumanMessage(content)]})
 
-    agent_message = response["messages"][-1].content
+        agent_message = response["messages"][-1].content
+
+    except Exception : 
+        agent_message = "API limit reached, Try again later"
+
 
     await message.channel.send(agent_message)
+
+
+
+
 
 
 client.run(token=os.getenv("DISCORD_API_KEY"))
