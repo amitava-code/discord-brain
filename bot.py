@@ -12,7 +12,9 @@ client = discord.Client(intents=intents)
 
 @client.event
 async def on_message(message):
-    print(message.content)
+    if message.author == client.user:
+        return
+    await message.channel.send("Hello!")
 
 
 client.run(token=os.getenv("DISCORD_API_KEY"))
