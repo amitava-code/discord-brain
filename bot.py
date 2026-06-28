@@ -19,11 +19,12 @@ tavily_client = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 
 @tool
 def surfInterNet(query:str):
-    """USe this tool to surf internet and get latest information"""
+    """Use this tool ONLY when the question requires real-time or latest info."""
 
-    result = tavily_client.search(query=query)
+    result = tavily_client.search(query=query , max_results=2)
 
-    return str(result)
+    return "\n".join([r["content"] for r in result["results"]])
+
 
 
 model = ChatGoogleGenerativeAI(
