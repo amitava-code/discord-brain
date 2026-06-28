@@ -10,5 +10,9 @@ intents.message_content = True
 
 client = discord.Client(intents=intents)
 
+@client.event
+async def on_message(message):
+    print(message.content)
+
 
 client.run(token=os.getenv("DISCORD_API_KEY"))
