@@ -26,7 +26,12 @@ def surfInterNet(query:str):
     return str(result)
 
 
-model = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+model = ChatGoogleGenerativeAI(
+    model="gemini-2.5-flash",
+    temperature = 0,
+    max_retries = 1
+)
+
 agent = create_agent(model=model, tools=[surfInterNet])
 
 
